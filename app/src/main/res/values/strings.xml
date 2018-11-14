@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">KYC Client</string>
+    <string name="edit_message">Enter a message</string>
+    <string name="button_send">Send</string>
+    <string name="button_save">Save</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="server_address">Address</string>
+    <string name="server_address_default">46.105.145.154</string>
+    <string name="server_port">Port</string>
+    <string name="server_port_default">8003</string>
+    <string name="server_protocol">Protocol</string>
+    <string name="server_protocol_default">HTTP</string>
+
+    <string-array name="protocols_array">
+        <item>HTTP</item>
+        <item>HTTPS</item>
+    </string-array>
+</resources>
