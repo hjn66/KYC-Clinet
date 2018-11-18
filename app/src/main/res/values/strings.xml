@@ -1,8 +1,22 @@
 <resources>
+    <string name="ok">OK</string>
+    <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
+    <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
+    <string name="low_storage_error">Face detector dependencies cannot be downloaded due to low device storage</string>
+    <string name="title_activity_main">KYC Client</string>
+    <string name="barcode_header">Click &quot;Read Barcode&quot; to read a barcode</string>
+    <string name="read_barcode">Read Barcode</string>
+    <string name="auto_focus">Auto Focus</string>
+    <string name="use_flash">Use Flash</string>
+    <string name="barcode_success">Barcode read successfully</string>
+    <string name="barcode_failure">No barcode captured</string>
+    <string name="barcode_error">"Error reading barcode: %1$s"</string>
     <string name="app_name">KYC Client</string>
     <string name="edit_message">Enter a message</string>
     <string name="button_send">Send</string>
     <string name="button_save">Save</string>
+    <string name="button_register">Register</string>
+    <string name="button_scan_qr_code">Scan QR Code</string>
     <string name="button_cancel">Cancel</string>
     <string name="server_address">Address</string>
     <string name="server_address_default">46.105.145.154</string>
@@ -10,9 +24,6 @@
     <string name="server_port_default">8003</string>
     <string name="server_protocol">Protocol</string>
     <string name="server_protocol_default">HTTP</string>
-
-    <string-array name="protocols_array">
-        <item>HTTP</item>
-        <item>HTTPS</item>
-    </string-array>
+    <string name="register_text">You should scan QR image of bank in order to register your information</string>
+    <string name="register_title">Register</string>
 </resources>
