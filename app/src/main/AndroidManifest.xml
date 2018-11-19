@@ -6,6 +6,8 @@
     <uses-feature android:name="android.hardware.camera" />
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
 
     <application
         android:allowBackup="true"
@@ -39,9 +41,9 @@
 
         <activity android:name="com.areatak.kycclient.BarcodeCaptureActivity"
             android:label="Read Barcode"/>
-        <activity android:name="com.areatak.kycclient.Setting"
+        <activity android:name=".Setting"
             android:label="Setting"/>
-        <activity android:name="com.areatak.kycclient.Register"
+        <activity android:name=".Register"
             android:label="Register"/>
 
     </application>

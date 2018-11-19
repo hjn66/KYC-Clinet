@@ -8,8 +8,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -19,11 +19,14 @@ import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 
 public class Register extends AppCompatActivity {
     private static final int READ_REQUEST_CODE = 42;
     private static final int RC_BARCODE_CAPTURE = 9001;
-    private TextView barcodeValue;
+    private String ticket;
+    private String nounce;
+    private EditText organizationText;
 
     private static final String TAG = "KYCRegister";
 
@@ -31,16 +34,18 @@ public class Register extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        barcodeValue = (TextView)findViewById(R.id.textRegisterTitle);
+        organizationText = (EditText) findViewById(R.id.textOrganization);
+        findViewById(R.id.textnationalId).requestFocus();
 
 
     }
 
-    public void openBarcode(View view){
+    public void openBarcode(View view) {
         Intent intent = new Intent(this, BarcodeCaptureActivity.class);
 
         startActivityForResult(intent, RC_BARCODE_CAPTURE);
     }
+
     public void performFileSearch(View view) {
         // ACTION_OPEN_DOCUMENT is the intent to choose a file via the system's file
         // browser.
@@ -86,21 +91,32 @@ public class Register extends AppCompatActivity {
             }
         }
         if (requestCode == RC_BARCODE_CAPTURE && resultCode == CommonStatusCodes.SUCCESS) {
-                if (resultData != null) {
-                    Barcode barcode = resultData.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
+            if (resultData != null) {
+                Barcode barcode = resultData.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
 
-                    try {
-                        JSONObject jsonObject = new JSONObject(barcode.displayValue);
-                        barcodeValue.setText(jsonObject.getString("T"));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-
-                    Log.d(TAG, "Barcode read: " + barcode.displayValue);
-                } else {
-                    Log.d(TAG, "No barcode captured, intent data is null");
+                try {
+                    JSONObject jsonObject = new JSONObject(barcode.displayValue);
+                    organizationText.setText(jsonObject.getString("O"));
+                    ticket = jsonObject.getString("T");
+                    nounce = jsonObject.getString("N");
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+
+
+                Log.d(TAG, "Barcode read: " + barcode.displayValue);
+            } else {
+                Log.d(TAG, "No barcode captured, intent data is null");
+            }
         }
     }
+
+    public void performRegister(View view) throws MalformedURLException {
+        EditText nationalId = (EditText) findViewById(R.id.textnationalId);
+        EditText firstName = (EditText) findViewById(R.id.textFirstName);
+        EditText lastName = (EditText) findViewById(R.id.textLastName);
+        RegisterData registerData = new RegisterData(nationalId.getText().toString(), nounce, ticket,firstName.getText().toString(),lastName.getText().toString());
+        new SendRegisterPost().execute(registerData);
+    }
+
 }
