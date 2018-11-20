@@ -10,6 +10,24 @@ public class RegisterData {
     private String ticket;
     private String firstName;
     private String lastName;
+    private String encodedPhoto;
+    private String birthdate;
+
+    public String getBirthdate() {
+        return birthdate;
+    }
+
+    public void setBirthdate(String birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public String getEncodedPhoto() {
+        return encodedPhoto;
+    }
+
+    public void setEncodedPhoto(String encodedPhoto) {
+        this.encodedPhoto = encodedPhoto;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -61,12 +79,14 @@ public class RegisterData {
 
 
 
-    public RegisterData(String nationalID, String nonce, String ticket, String firstName, String lastName) throws MalformedURLException {
+    public RegisterData(String nationalID, String firstName, String lastName,String birthdate, String encodedPhoto, String nonce, String ticket) throws MalformedURLException {
         NationalID = nationalID;
         this.url = new URL("http://46.105.145.154:8003/registerQR");
         this.nonce = nonce;
         this.ticket = ticket;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.encodedPhoto = encodedPhoto;
+        this.birthdate = birthdate;
     }
 }

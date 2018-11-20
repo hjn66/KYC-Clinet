@@ -28,7 +28,9 @@ class SendRegisterPost extends AsyncTask<RegisterData, Void, String> {
             jsonParam.put("NationalId", registerData.getNationalID());
             jsonParam.put("FirstName", registerData.getFirstName());
             jsonParam.put("LastName", registerData.getLastName());
-            jsonParam.put("Nounce", registerData.getNonce());
+            jsonParam.put("Nonce", registerData.getNonce());
+            jsonParam.put("Photo", registerData.getEncodedPhoto());
+            jsonParam.put("BirthDate", registerData.getBirthdate());
             jsonParam.put("Ticket", registerData.getTicket());
 
             Log.i("JSON", jsonParam.toString());

@@ -43,9 +43,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         if (v.getId() == R.id.read_barcode) {
             // launch barcode activity.
-            Intent intent = new Intent(this, BarcodeCaptureActivity.class);
-
-            startActivityForResult(intent, RC_BARCODE_CAPTURE);
+            Intent intent = new Intent(this, Profile.class);
+            startActivity(intent);
         }
         if (v.getId() == R.id.setting) {
             Intent intent = new Intent(this, Register.class);

@@ -1,15 +1,22 @@
 package com.areatak.kycclient;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.barcode.Barcode;
@@ -17,16 +24,25 @@ import com.google.android.gms.vision.barcode.Barcode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.FileNotFoundException;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.ExecutionException;
 
 public class Register extends AppCompatActivity {
     private static final int READ_REQUEST_CODE = 42;
     private static final int RC_BARCODE_CAPTURE = 9001;
     private String ticket;
-    private String nounce;
+    private String nonce;
     private EditText organizationText;
+    private ProgressBar spinner;
+    private String encodedImage;
+
 
     private static final String TAG = "KYCRegister";
 
@@ -34,10 +50,13 @@ public class Register extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        organizationText = (EditText) findViewById(R.id.textOrganization);
+        organizationText = findViewById(R.id.textOrganization);
         findViewById(R.id.textnationalId).requestFocus();
-
-
+        spinner = findViewById(R.id.progressBar);
+        spinner.setVisibility(View.GONE);
+        Snackbar.make(findViewById(R.id.IDDDD), R.string.server_address,
+                Snackbar.LENGTH_LONG)
+                .show();
     }
 
     public void openBarcode(View view) {
@@ -82,10 +101,12 @@ public class Register extends AppCompatActivity {
                 uri = resultData.getData();
                 try {
                     InputStream inputStream = getContentResolver().openInputStream(uri);
-                    ImageView imageView = (ImageView) findViewById(R.id.profile_image);
-
+                    ImageView imageView = findViewById(R.id.profile_image);
+                    byte[] bytes = readBytes(inputStream);
+                    encodedImage = Base64.encodeToString(bytes, Base64.DEFAULT);
+                    inputStream = getContentResolver().openInputStream(uri);
                     imageView.setImageBitmap(BitmapFactory.decodeStream(inputStream));
-                } catch (FileNotFoundException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -98,7 +119,7 @@ public class Register extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(barcode.displayValue);
                     organizationText.setText(jsonObject.getString("O"));
                     ticket = jsonObject.getString("T");
-                    nounce = jsonObject.getString("N");
+                    nonce = jsonObject.getString("N");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -111,12 +132,84 @@ public class Register extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void performRegister(View view) throws MalformedURLException {
-        EditText nationalId = (EditText) findViewById(R.id.textnationalId);
-        EditText firstName = (EditText) findViewById(R.id.textFirstName);
-        EditText lastName = (EditText) findViewById(R.id.textLastName);
-        RegisterData registerData = new RegisterData(nationalId.getText().toString(), nounce, ticket,firstName.getText().toString(),lastName.getText().toString());
-        new SendRegisterPost().execute(registerData);
+        String nationalId = ((EditText) findViewById(R.id.textnationalId)).getText().toString();
+        String firstName = ((EditText) findViewById(R.id.textFirstName)).getText().toString();
+        String lastName = ((EditText) findViewById(R.id.textLastName)).getText().toString();
+        String birthDate = ((EditText) findViewById(R.id.textBirthDate)).getText().toString();
+        RegisterData registerData = new RegisterData(nationalId, firstName, lastName, birthDate, encodedImage, nonce, ticket);
+        spinner.setVisibility(View.VISIBLE);
+        try {
+            String result = new SendRegisterPost().execute(registerData).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        spinner.setVisibility(View.GONE);
+        Snackbar.make(findViewById(R.id.IDDDD), R.string.server_address, Snackbar.LENGTH_LONG).show();
+        try {
+            KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
+            kpg.initialize(2048);
+            KeyPair keyPair = kpg.genKeyPair();
+            String privateKey = java.util.Base64.getMimeEncoder().encodeToString( keyPair.getPrivate().getEncoded());
+            String publicKey = java.util.Base64.getMimeEncoder().encodeToString( keyPair.getPublic().getEncoded());
+            FileOutputStream outputStream;
+
+            try {
+                    outputStream = openFileOutput("publicKey.pem", Context.MODE_PRIVATE);
+                outputStream.write(publicKey.getBytes());
+                outputStream.close();
+
+                outputStream = openFileOutput("private.pem", Context.MODE_PRIVATE);
+                outputStream.write(privateKey.getBytes());
+                outputStream.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            SharedPreferences sharedPref = this.getSharedPreferences("PROFILE",Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+
+            editor.putString(getString(R.string.nationalID), nationalId);
+            editor.commit();
+
+            editor.putString(getString(R.string.firstName), firstName);
+            editor.commit();
+
+            editor.putString(getString(R.string.lastName), lastName);
+            editor.commit();
+
+            editor.putString(getString(R.string.birthDate), birthDate);
+            editor.commit();
+
+            editor.putString(getString(R.string.publicKey), publicKey);
+            editor.commit();
+
+            editor.putString(getString(R.string.privateKey), privateKey);
+            editor.commit();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
     }
 
+    public byte[] readBytes(InputStream inputStream) throws IOException {
+        // this dynamically extends to take the bytes you read
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+
+        // this is storage overwritten on each iteration with bytes
+        int bufferSize = 1024;
+        byte[] buffer = new byte[bufferSize];
+
+        // we need to know how may bytes were read to write them to the byteBuffer
+        int len = 0;
+        while ((len = inputStream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, len);
+        }
+
+        // and then we can return your byte array.
+        return byteBuffer.toByteArray();
+    }
 }

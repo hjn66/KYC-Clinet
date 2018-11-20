@@ -45,6 +45,8 @@
             android:label="Setting"/>
         <activity android:name=".Register"
             android:label="Register"/>
+        <activity android:name=".Profile"
+            android:label="Profile"/>
 
     </application>
 

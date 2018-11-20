@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/IDDDD"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_circles"
@@ -9,7 +10,7 @@
 
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/textLayoutOrganization"
+        android:id="@+id/textLayoutPublickey"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -117,7 +118,7 @@
         app:fontFamily="@font/roboto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textLayoutOrganization">
+        app:layout_constraintTop_toBottomOf="@+id/textLayoutPublickey">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/textnationalId"
@@ -261,6 +262,7 @@
         android:src="@drawable/avatar"
         app:civ_border_color="@color/colorAccent"
         app:civ_border_width="2dp"
+        app:layout_constraintBottom_toTopOf="@+id/textLayoutBirthDate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textLayoutNationalId" />
 
@@ -276,5 +278,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textLayoutNationalId"
         app:srcCompat="@android:drawable/ic_menu_edit" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:progressDrawable="@drawable/circular_progress_bar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

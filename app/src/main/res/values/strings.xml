@@ -24,6 +24,16 @@
     <string name="server_port_default">8003</string>
     <string name="server_protocol">Protocol</string>
     <string name="server_protocol_default">HTTP</string>
+    <string name="nationalID">National ID</string>
+    <string name="firstName">First Name</string>
+    <string name="lastName">Last Name</string>
+    <string name="publicKey">Public Key</string>
+    <string name="privateKey">Private Key</string>
+    <string name="birthDate">Birth Date</string>
+    <string name="name_default">Name</string>
+    <string name="approved">Approved</string>
+    <string name="denied">Denied</string>
+    <string name="pending">Pending</string>
     <string name="register_text">You should scan QR image of bank in order to register your information</string>
     <string name="register_title">Register</string>
 </resources>
