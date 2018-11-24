@@ -9,81 +9,35 @@
     tools:context=".Register">
 
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/textLayoutPublickey"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-
-        android:layout_marginRight="32dp"
-
-        android:textColorHint="@color/colorPrimary"
-        android:theme="@style/AppTheme"
-        app:fontFamily="@font/roboto"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textRegisterTitle">
-
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/textOrganization"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-
-            android:hint="Organization"
-            android:inputType="numberDecimal"
-            android:textColor="@color/colorPrimary"
-            android:textColorHighlight="@color/colorPrimary"
-            android:textColorHint="@color/colorPrimary"
-            android:theme="@style/AppTheme"
-            app:fontFamily="@font/roboto" />
-    </android.support.design.widget.TextInputLayout>
-
     <TextView
-        android:id="@+id/textView3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginBottom="32dp"
-        android:text="Still without account?"
-        android:textColor="@color/colorPrimary"
-        android:textSize="16sp"
-        app:fontFamily="@font/roboto"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="0dp"
-        android:layout_height="21dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginBottom="32dp"
-        android:text="Register Now"
-        android:textColor="@color/design_default_color_primary"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:fontFamily="@font/roboto"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView3" />
-
-    <TextView
-        android:id="@+id/textRegisterTitle"
+        android:id="@+id/textLoginTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
         android:layout_marginTop="32dp"
-        android:text="@string/register_title"
+        android:text="@string/Login_title"
         android:textColor="@android:color/background_dark"
         android:textSize="24sp"
         app:fontFamily="@font/roboto"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:text="@string/Login_info"
+        android:textColor="@color/colorPrimary"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textLoginTitle" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/textLayoutNationalId"
@@ -91,17 +45,19 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
 
-        android:layout_marginRight="32dp"
+        android:layout_marginTop="16dp"
 
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="32dp"
         android:textColorHint="@color/colorPrimary"
         android:theme="@style/AppTheme"
         app:fontFamily="@font/roboto"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/textLayoutFirstName"
+        app:layout_constraintEnd_toStartOf="@+id/button_nationalId"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textLayoutPublickey">
+        app:layout_constraintTop_toBottomOf="@+id/textView">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/textnationalId"
@@ -124,13 +80,13 @@
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:textColorHint="@color/colorPrimary"
         android:theme="@style/AppTheme"
         app:boxBackgroundColor="@color/colorPrimary"
         app:boxStrokeColor="@color/colorPrimary"
-        app:layout_constraintEnd_toStartOf="@+id/profile_image"
+        app:layout_constraintEnd_toStartOf="@+id/button_firstName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textLayoutNationalId">
 
@@ -153,11 +109,11 @@
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
         android:textColorHint="@color/colorPrimary"
         android:theme="@style/AppTheme"
-        app:layout_constraintEnd_toStartOf="@+id/profile_image"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textLayoutFirstName">
 
@@ -206,7 +162,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="140dp"
         android:background="@drawable/button_bg_rounded_corners"
         android:onClick="performRegister"
         android:paddingLeft="16dp"
@@ -221,9 +177,9 @@
         android:id="@+id/buttonScanQR"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/button_bg_rounded_corners"
         android:onClick="openBarcode"
         android:paddingLeft="16dp"
@@ -232,48 +188,57 @@
         android:textAllCaps="false"
         android:textColor="@color/purpleSolid"
         app:layout_constraintStart_toEndOf="@+id/buttonRegister"
-        app:layout_constraintTop_toBottomOf="@+id/textLayoutBirthDate" />
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
-    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/profile_image"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:layout_marginTop="32dp"
+    <Button
+        android:id="@+id/button_nationalId"
+        android:layout_width="72dp"
+        android:layout_height="24dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
-        android:onClick="performFileSearch"
-        android:src="@drawable/avatar"
-        app:civ_border_color="@color/purpleSolid"
-        app:civ_border_width="2dp"
-        app:layout_constraintBottom_toTopOf="@+id/textLayoutBirthDate"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textLayoutNationalId" />
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/button_bg_rounded_corners_approved"
+        android:text="@string/required"
+        android:textAllCaps="false"
+        android:textColor="@color/greenSolid"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toTopOf="@+id/textLayoutFirstName"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <ImageButton
-        android:id="@+id/buttonChooseImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+    <Button
+        android:id="@+id/button_firstName"
+        android:layout_width="72dp"
+        android:layout_height="24dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
-        android:background="@drawable/button_bg_rounded_corners"
-        android:onClick="performFileSearch"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textLayoutNationalId"
-        app:srcCompat="@android:drawable/ic_menu_edit" />
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/button_bg_rounded_corners_denied"
+        android:text="@string/not_required"
+        android:textAllCaps="false"
+        android:textColor="@color/redSolid"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toTopOf="@+id/textLayoutLastName"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:progressDrawable="@drawable/circular_progress_bar"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:hint="Image"
+        android:textColorHint="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteY="321dp">
+
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Hint"
+            android:textColor="@color/colorPrimary" />
+    </android.support.design.widget.TextInputLayout>
 
 </android.support.constraint.ConstraintLayout>

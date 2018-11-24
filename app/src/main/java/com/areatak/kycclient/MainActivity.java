@@ -1,20 +1,17 @@
 package com.areatak.kycclient;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
-
-import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.vision.barcode.Barcode;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
     // use a compound button so either checkbox or switch widgets work.
-    private TextView statusMessage;
-    private TextView barcodeValue;
+//    private TextView statusMessage;
+//    private TextView barcodeValue;
 
     private static final int RC_BARCODE_CAPTURE = 9001;
     private static final String TAG = "KYCMain";
@@ -26,11 +23,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        statusMessage = (TextView)findViewById(R.id.status_message);
-        barcodeValue = (TextView)findViewById(R.id.barcode_value);
+//        statusMessage = (TextView)findViewById(R.id.status_message);
+//        barcodeValue = (TextView)findViewById(R.id.barcode_value);
 
-        findViewById(R.id.read_barcode).setOnClickListener(this);
-        findViewById(R.id.setting).setOnClickListener(this);
+        findViewById(R.id.button_register).setOnClickListener(this);
+        findViewById(R.id.button_login).setOnClickListener(this);
 
     }
 
@@ -41,14 +38,21 @@ public class MainActivity extends Activity implements View.OnClickListener {
      */
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.read_barcode) {
+        if (v.getId() == R.id.button_login) {
             // launch barcode activity.
-            Intent intent = new Intent(this, Profile.class);
+            Intent intent = new Intent(this, Login.class);
             startActivity(intent);
         }
-        if (v.getId() == R.id.setting) {
-            Intent intent = new Intent(this, Register.class);
-            startActivity(intent);
+        if (v.getId() == R.id.button_register) {
+            SharedPreferences sharedPref = this.getSharedPreferences("PROFILE",Context.MODE_PRIVATE);
+            Boolean isRegistered = sharedPref.getBoolean(getString(R.string.isRegistered),false);
+            if (isRegistered){
+                Intent intent = new Intent(this, Profile.class);
+                startActivity(intent);
+            }else {
+                Intent intent = new Intent(this, Register.class);
+                startActivity(intent);
+            }
         }
 
     }
@@ -75,26 +79,26 @@ public class MainActivity extends Activity implements View.OnClickListener {
      * @see #createPendingResult
      * @see #setResult(int)
      */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == RC_BARCODE_CAPTURE) {
-            if (resultCode == CommonStatusCodes.SUCCESS) {
-                if (data != null) {
-                    Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
-                    statusMessage.setText(R.string.barcode_success);
-                    barcodeValue.setText(barcode.displayValue);
-                    Log.d(TAG, "Barcode read: " + barcode.displayValue);
-                } else {
-                    statusMessage.setText(R.string.barcode_failure);
-                    Log.d(TAG, "No barcode captured, intent data is null");
-                }
-            } else {
-                statusMessage.setText(String.format(getString(R.string.barcode_error),
-                        CommonStatusCodes.getStatusCodeString(resultCode)));
-            }
-        }
-        else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (requestCode == RC_BARCODE_CAPTURE) {
+//            if (resultCode == CommonStatusCodes.SUCCESS) {
+//                if (data != null) {
+//                    Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
+//                    statusMessage.setText(R.string.barcode_success);
+//                    barcodeValue.setText(barcode.displayValue);
+//                    Log.d(TAG, "Barcode read: " + barcode.displayValue);
+//                } else {
+//                    statusMessage.setText(R.string.barcode_failure);
+//                    Log.d(TAG, "No barcode captured, intent data is null");
+//                }
+//            } else {
+//                statusMessage.setText(String.format(getString(R.string.barcode_error),
+//                        CommonStatusCodes.getStatusCodeString(resultCode)));
+//            }
+//        }
+//        else {
+//            super.onActivityResult(requestCode, resultCode, data);
+//        }
+//    }
 }

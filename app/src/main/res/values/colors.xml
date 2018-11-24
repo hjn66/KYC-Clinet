@@ -2,8 +2,11 @@
 <resources>
     <color name="colorPrimary">#6d6f6f</color>
     <color name="purpleTransparent">#c87a45e7</color>
-    <color name="purpleSolid">#7a45e7</color>
+    <color name="purpleSolid">#723ced</color>
+    <color name="purpleLight">#cebff2</color>
     <color name="greenSolid">#00c773</color>
+    <color name="redSolid">#c60e14</color>
+    <color name="yellowSolid">#dec019</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#ff6e58</color>
 </resources>

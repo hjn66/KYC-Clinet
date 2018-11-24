@@ -10,7 +10,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -40,6 +43,9 @@ public class Register extends AppCompatActivity {
     private String ticket;
     private String nonce;
     private EditText organizationText;
+    private EditText textNationalID;
+    private EditText textFirstName;
+    private EditText textLastName;
     private ProgressBar spinner;
     private String encodedImage;
 
@@ -51,12 +57,79 @@ public class Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         organizationText = findViewById(R.id.textOrganization);
-        findViewById(R.id.textnationalId).requestFocus();
+
+        textNationalID = findViewById(R.id.textnationalId);
+        textFirstName = findViewById(R.id.textFirstName);
+        textLastName = findViewById(R.id.textLastName);
+        textNationalID.requestFocus();
+
         spinner = findViewById(R.id.progressBar);
         spinner.setVisibility(View.GONE);
-        Snackbar.make(findViewById(R.id.IDDDD), R.string.server_address,
-                Snackbar.LENGTH_LONG)
-                .show();
+
+        Intent intent = new Intent(this, BarcodeCaptureActivity.class);
+        startActivityForResult(intent, RC_BARCODE_CAPTURE);
+
+        textNationalID.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (checkNationalId(s.toString())){
+                    TextInputLayout til = findViewById(R.id.textLayoutNationalId);
+                    til.setErrorEnabled(false);
+                    til.setError(null);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        textNationalID.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (!checkNationalId(textNationalID.getText().toString())) {
+                        TextInputLayout til = findViewById(R.id.textLayoutNationalId);
+                        til.setError(getText(R.string.invalid_nationalID));
+                    }
+                }
+            }
+        });
+
+        textFirstName.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length()>0){
+                    TextInputLayout til = findViewById(R.id.textLayoutFirstName);
+                    til.setErrorEnabled(false);
+                    til.setError(null);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+        textFirstName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (textFirstName.getText().length() == 0) {
+                        TextInputLayout til = findViewById(R.id.textLayoutFirstName);
+                        til.setError(getText(R.string.invalid_firstName));
+                    }
+                }
+            }
+        });
     }
 
     public void openBarcode(View view) {
@@ -132,33 +205,69 @@ public class Register extends AppCompatActivity {
         }
     }
 
+    private boolean checkNationalId(String nationalID) {
+        if (nationalID.length() != 10) {
+            return false;
+        }
+        int nationalIdInt = Integer.parseInt(nationalID);
+        int sum = 0;
+        int pos = 2;
+        int controlDig = nationalIdInt % 10;
+        nationalIdInt = nationalIdInt / 10;
+        while (nationalIdInt > 0) {
+            sum += (nationalIdInt % 10) * pos;
+            nationalIdInt = nationalIdInt / 10;
+            pos++;
+        }
+        if (sum % 11 < 2) {
+            if (sum % 11 == controlDig)
+                return true;
+        } else {
+            if (sum % 11 == (11 - controlDig)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void performRegister(View view) throws MalformedURLException {
-        String nationalId = ((EditText) findViewById(R.id.textnationalId)).getText().toString();
+        String nationalId = textNationalID.getText().toString();
+        if (!checkNationalId(nationalId)) {
+            TextInputLayout til = findViewById(R.id.textLayoutNationalId);
+            til.setError(getText(R.string.invalid_nationalID));
+            return;
+        }
         String firstName = ((EditText) findViewById(R.id.textFirstName)).getText().toString();
+        if (firstName.length() == 0) {
+            TextInputLayout til = findViewById(R.id.textLayoutFirstName);
+            til.setError("First Name required");
+            return;
+        }
         String lastName = ((EditText) findViewById(R.id.textLastName)).getText().toString();
         String birthDate = ((EditText) findViewById(R.id.textBirthDate)).getText().toString();
         RegisterData registerData = new RegisterData(nationalId, firstName, lastName, birthDate, encodedImage, nonce, ticket);
         spinner.setVisibility(View.VISIBLE);
+        String registerResult = "";
         try {
-            String result = new SendRegisterPost().execute(registerData).get();
+            registerResult = new SendRegisterPost().execute(registerData).get();
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         spinner.setVisibility(View.GONE);
-        Snackbar.make(findViewById(R.id.IDDDD), R.string.server_address, Snackbar.LENGTH_LONG).show();
+        Snackbar.make(findViewById(R.id.IDDDD), registerResult, Snackbar.LENGTH_LONG).show();
         try {
             KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
             kpg.initialize(2048);
             KeyPair keyPair = kpg.genKeyPair();
-            String privateKey = java.util.Base64.getMimeEncoder().encodeToString( keyPair.getPrivate().getEncoded());
-            String publicKey = java.util.Base64.getMimeEncoder().encodeToString( keyPair.getPublic().getEncoded());
+            String privateKey = java.util.Base64.getMimeEncoder().encodeToString(keyPair.getPrivate().getEncoded());
+            String publicKey = java.util.Base64.getMimeEncoder().encodeToString(keyPair.getPublic().getEncoded());
             FileOutputStream outputStream;
 
             try {
-                    outputStream = openFileOutput("publicKey.pem", Context.MODE_PRIVATE);
+                outputStream = openFileOutput("publicKey.pem", Context.MODE_PRIVATE);
                 outputStream.write(publicKey.getBytes());
                 outputStream.close();
 
@@ -169,8 +278,17 @@ public class Register extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            SharedPreferences sharedPref = this.getSharedPreferences("PROFILE",Context.MODE_PRIVATE);
+            SharedPreferences sharedPref = this.getSharedPreferences("PROFILE", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
+
+            editor.putString(getString(R.string.register_status), "Pending");
+            editor.commit();
+
+            editor.putBoolean(getString(R.string.isRegistered), true);
+            editor.commit();
+
+            editor.putString(getString(R.string.register_nonce), nonce);
+            editor.commit();
 
             editor.putString(getString(R.string.nationalID), nationalId);
             editor.commit();

@@ -165,7 +165,8 @@
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:text="@string/button_save"
-        android:textColor="@color/colorAccent"
+        android:textAllCaps="false"
+        android:textColor="@color/purpleSolid"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textLayoutLastName" />
 </android.support.constraint.ConstraintLayout>

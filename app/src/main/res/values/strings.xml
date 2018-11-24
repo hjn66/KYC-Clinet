@@ -15,8 +15,10 @@
     <string name="edit_message">Enter a message</string>
     <string name="button_send">Send</string>
     <string name="button_save">Save</string>
+    <string name="button_register_profile">Register / Profile</string>
     <string name="button_register">Register</string>
-    <string name="button_scan_qr_code">Scan QR Code</string>
+    <string name="button_login">Login</string>
+    <string name="button_rescan_qr_code">Re-Scan QR Code</string>
     <string name="button_cancel">Cancel</string>
     <string name="server_address">Address</string>
     <string name="server_address_default">46.105.145.154</string>
@@ -25,8 +27,11 @@
     <string name="server_protocol">Protocol</string>
     <string name="server_protocol_default">HTTP</string>
     <string name="nationalID">National ID</string>
+    <string name="invalid_nationalID">Invalid National ID</string>
     <string name="firstName">First Name</string>
+    <string name="invalid_firstName">First Name Required</string>
     <string name="lastName">Last Name</string>
+    <string name="invalid_lastName">Last Name Required</string>
     <string name="publicKey">Public Key</string>
     <string name="privateKey">Private Key</string>
     <string name="birthDate">Birth Date</string>
@@ -36,4 +41,12 @@
     <string name="pending">Pending</string>
     <string name="register_text">You should scan QR image of bank in order to register your information</string>
     <string name="register_title">Register</string>
+    <string name="register_status">Pending</string>
+    <string name="register_nonce"></string>
+    <string name="isRegistered">Is Registered</string>
+    <string name="Login_title">Login</string>
+    <string name="Login_info">Following information need</string>
+    <string name="required">Required</string>
+    <string name="not_required">Not Required</string>
+    <string name="hint">hint</string>
 </resources>
