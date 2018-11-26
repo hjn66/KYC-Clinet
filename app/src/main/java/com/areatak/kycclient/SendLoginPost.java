@@ -11,12 +11,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-class SendRegisterPost extends AsyncTask<RegisterData, Void, String> {
+class SendLoginPost extends AsyncTask<LoginData, Void, String> {
 
-    protected String doInBackground(RegisterData... registerDatas) {
+    protected String doInBackground(LoginData... loginInformation) {
         try {
-            RegisterData registerData = registerDatas[0];
-            URL url = registerData.getUrl();
+            LoginData loginData = loginInformation[0];
+            URL url = loginData.getUrl();
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
@@ -25,19 +25,15 @@ class SendRegisterPost extends AsyncTask<RegisterData, Void, String> {
             conn.setDoInput(true);
 
             JSONObject jsonParam = new JSONObject();
-            jsonParam.put("NationalId", registerData.getNationalID());
-            jsonParam.put("FirstName", registerData.getFirstName());
-            jsonParam.put("LastName", registerData.getLastName());
-            jsonParam.put("Nonce", registerData.getNonce());
-            jsonParam.put("Photo", registerData.getEncodedPhoto());
-//            jsonParam.put("Photo", "123");
-            jsonParam.put("BirthDate", registerData.getBirthDate());
-            jsonParam.put("Ticket", registerData.getTicket());
-            jsonParam.put("PublicKey", registerData.getPublicKey());
+            jsonParam.put("FirstName", loginData.getFirstName());
+            jsonParam.put("LastName", loginData.getLastName());
+            jsonParam.put("SignedNonce", loginData.getSignedNonce());
+            jsonParam.put("Image", loginData.getEncodedPhoto());
+            jsonParam.put("Ticket", loginData.getTicket());
+            jsonParam.put("GUID", loginData.getGUID());
 
             Log.i("JSON", jsonParam.toString());
             DataOutputStream os = new DataOutputStream(conn.getOutputStream());
-            //os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
             os.writeBytes(jsonParam.toString());
 
             os.flush();
@@ -56,12 +52,7 @@ class SendRegisterPost extends AsyncTask<RegisterData, Void, String> {
             return sb.toString();
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e("EMSG", e.toString());
             return null;
         }
-    }
-
-    protected void onPostExecute(Long result) {
-        //
     }
 }

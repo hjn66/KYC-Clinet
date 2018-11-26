@@ -29,6 +29,8 @@
     <string name="nationalID">National ID</string>
     <string name="invalid_nationalID">Invalid National ID</string>
     <string name="firstName">First Name</string>
+    <string name="profile_image">Profile Image</string>
+    <string name="encoded_image">Profile Image</string>
     <string name="invalid_firstName">First Name Required</string>
     <string name="lastName">Last Name</string>
     <string name="invalid_lastName">Last Name Required</string>
@@ -41,12 +43,23 @@
     <string name="pending">Pending</string>
     <string name="register_text">You should scan QR image of bank in order to register your information</string>
     <string name="register_title">Register</string>
-    <string name="register_status">Pending</string>
+    <string name="register_status">Register Status</string>
     <string name="register_nonce"></string>
+    <string name="register_guid"></string>
+    <string name="no_registered_message">You have not registered or your registration not approved yet</string>
+    <string name="register_subURL">/registerQR</string>
+    <string name="login_subURL">/checkfield</string>
+    <string name="check_status_subURL">/registers?nonce=</string>
     <string name="isRegistered">Is Registered</string>
     <string name="Login_title">Login</string>
+    <string name="Login_to">Login to</string>
+    <string name="Login_edit_info">Edit &amp; Login</string>
     <string name="Login_info">Following information need</string>
     <string name="required">Required</string>
     <string name="not_required">Not Required</string>
     <string name="hint">hint</string>
+    <string name="login_fields">Login Fields</string>
+    <string name="login_ticket">Login Ticket</string>
+    <string name="login_nonce">Login Nonce</string>
+    <string name="profile_image_uri">ProfileImageURI</string>
 </resources>

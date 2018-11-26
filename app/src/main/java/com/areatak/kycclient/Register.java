@@ -77,7 +77,7 @@ public class Register extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (checkNationalId(s.toString())){
+                if (checkNationalId(s.toString())) {
                     TextInputLayout til = findViewById(R.id.textLayoutNationalId);
                     til.setErrorEnabled(false);
                     til.setError(null);
@@ -108,7 +108,7 @@ public class Register extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.length()>0){
+                if (s.length() > 0) {
                     TextInputLayout til = findViewById(R.id.textLayoutFirstName);
                     til.setErrorEnabled(false);
                     til.setError(null);
@@ -177,6 +177,12 @@ public class Register extends AppCompatActivity {
                     ImageView imageView = findViewById(R.id.profile_image);
                     byte[] bytes = readBytes(inputStream);
                     encodedImage = Base64.encodeToString(bytes, Base64.DEFAULT);
+
+                    SharedPreferences sharedPref = this.getSharedPreferences("PROFILE", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString(getString(R.string.profile_image_uri), uri.toString());
+                    editor.commit();
+
                     inputStream = getContentResolver().openInputStream(uri);
                     imageView.setImageBitmap(BitmapFactory.decodeStream(inputStream));
                 } catch (IOException e) {
@@ -246,39 +252,38 @@ public class Register extends AppCompatActivity {
         }
         String lastName = ((EditText) findViewById(R.id.textLastName)).getText().toString();
         String birthDate = ((EditText) findViewById(R.id.textBirthDate)).getText().toString();
-        RegisterData registerData = new RegisterData(nationalId, firstName, lastName, birthDate, encodedImage, nonce, ticket);
-        spinner.setVisibility(View.VISIBLE);
-        String registerResult = "";
-        try {
-            registerResult = new SendRegisterPost().execute(registerData).get();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        spinner.setVisibility(View.GONE);
-        Snackbar.make(findViewById(R.id.IDDDD), registerResult, Snackbar.LENGTH_LONG).show();
+        SharedPreferences sharedPref = this.getSharedPreferences("SETTING", Context.MODE_PRIVATE);
+        String protocol = sharedPref.getString(getString(R.string.server_protocol), getString(R.string.server_protocol_default));
+        String serverAddress = sharedPref.getString(getString(R.string.server_address), getString(R.string.server_address_default));
+        String serverPort = sharedPref.getString(getString(R.string.server_port), getString(R.string.server_port_default));
+
+        String url = protocol + "://" + serverAddress + ":" + serverPort + getString(R.string.register_subURL);
+
         try {
             KeyPairGenerator kpg = KeyPairGenerator.getInstance("RSA");
             kpg.initialize(2048);
             KeyPair keyPair = kpg.genKeyPair();
             String privateKey = java.util.Base64.getMimeEncoder().encodeToString(keyPair.getPrivate().getEncoded());
             String publicKey = java.util.Base64.getMimeEncoder().encodeToString(keyPair.getPublic().getEncoded());
+            privateKey = privateKey.replace("\r\n", "");
+            publicKey = publicKey.replace("\r\n", "");
+            publicKey = "-----BEGIN PUBLIC KEY-----\n"+publicKey+"\n-----END PUBLIC KEY-----";
+            RegisterData registerData = new RegisterData(url, nationalId, firstName, lastName, birthDate, encodedImage, publicKey, nonce, ticket);
+            spinner.setVisibility(View.VISIBLE);
+            String registerResult = new SendRegisterPost().execute(registerData).get();
+            spinner.setVisibility(View.GONE);
+            Snackbar.make(findViewById(R.id.IDDDD), registerResult, Snackbar.LENGTH_LONG).show();
             FileOutputStream outputStream;
 
-            try {
-                outputStream = openFileOutput("publicKey.pem", Context.MODE_PRIVATE);
-                outputStream.write(publicKey.getBytes());
-                outputStream.close();
+            outputStream = openFileOutput("publicKey.pem", Context.MODE_PRIVATE);
+            outputStream.write(publicKey.getBytes());
+            outputStream.close();
 
-                outputStream = openFileOutput("private.pem", Context.MODE_PRIVATE);
-                outputStream.write(privateKey.getBytes());
-                outputStream.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            outputStream = openFileOutput("private.pem", Context.MODE_PRIVATE);
+            outputStream.write(privateKey.getBytes());
+            outputStream.close();
 
-            SharedPreferences sharedPref = this.getSharedPreferences("PROFILE", Context.MODE_PRIVATE);
+            sharedPref = this.getSharedPreferences("PROFILE", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
 
             editor.putString(getString(R.string.register_status), "Pending");
@@ -302,15 +307,25 @@ public class Register extends AppCompatActivity {
             editor.putString(getString(R.string.birthDate), birthDate);
             editor.commit();
 
-            editor.putString(getString(R.string.publicKey), publicKey);
+            editor.putString(getString(R.string.encoded_image), encodedImage);
             editor.commit();
 
+//            editor.putString(getString(R.string.publicKey), publicKey);
+//            editor.commit();
+//
             editor.putString(getString(R.string.privateKey), privateKey);
             editor.commit();
 
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 
     public byte[] readBytes(InputStream inputStream) throws IOException {

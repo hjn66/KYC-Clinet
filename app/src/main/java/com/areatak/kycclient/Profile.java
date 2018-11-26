@@ -58,37 +58,9 @@ public class Profile extends AppCompatActivity {
         String publicKey = sharedPref.getString(getString(R.string.publicKey), "");
         txtPublicKey.setText(publicKey);
 
-        RSAPrivateKey pkey = null;
-        RSAPublicKey pukey = null;
-        try {
-            String privateKey = sharedPref.getString(getString(R.string.privateKey), "");
-            pkey = RSA.getPrivateKeyFromString(privateKey);
-            pukey = RSA.getPublicKeyFromString(publicKey);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (GeneralSecurityException e) {
-            e.printStackTrace();
-        }
-
-
-        String message = "ox0HD1cPgM";
-        try {
-            String signed = RSA.sign(pkey, message);
-            txtPublicKey.setText(signed);
-            if (RSA.verify(pukey, message, signed)) {
-                txtPublicKey.setText("Verified");
-            }
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (SignatureException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
         registerStatus = sharedPref.getString(getString(R.string.register_status), "Pending");
-        if (!registerStatus.equals("Pending")) {
+        applyStatus(registerStatus);
+        if (registerStatus.equals("Pending")) {
 
             final Handler handler = new Handler();
             timer = new Timer();
@@ -108,41 +80,52 @@ public class Profile extends AppCompatActivity {
             timer.schedule(doAsynchronousTask, 0, 1000); //execute in every 1 sec
         }
     }
+    private void applyStatus(String status){
+        buttonStatus.setText(status);
+        if (status.equals("Pending")) {
+            buttonStatus.setBackgroundResource(R.drawable.button_bg_rounded_corners_pending);
+            buttonStatus.setTextColor(getApplication().getResources().getColor(R.color.yellowSolid));
+        } else {
+            if (status.equals("Approved")) {
+                buttonStatus.setBackgroundResource(R.drawable.button_bg_rounded_corners_approved);
+                buttonStatus.setTextColor(getApplication().getResources().getColor(R.color.greenSolid));
+            }
+            if (status.equals("Denied")) {
+                buttonStatus.setBackgroundResource(R.drawable.button_bg_rounded_corners_denied);
+                buttonStatus.setTextColor(getApplication().getResources().getColor(R.color.redSolid));
+            }
+        }
+    }
 
     private void checkStatus() throws MalformedURLException {
         SharedPreferences sharedPref = this.getSharedPreferences("PROFILE", Context.MODE_PRIVATE);
         String nonce = sharedPref.getString(getString(R.string.register_nonce), "");
-        URL url = new URL("http://46.105.145.154:8003/registers?nonce=" + nonce);
+        SharedPreferences settingSharedPref = this.getSharedPreferences("SETTING", Context.MODE_PRIVATE);
+        String protocol = settingSharedPref.getString(getString(R.string.server_protocol), getString(R.string.server_protocol_default));
+        String serverAddress = settingSharedPref.getString(getString(R.string.server_address), getString(R.string.server_address_default));
+        String serverPort = settingSharedPref.getString(getString(R.string.server_port), getString(R.string.server_port_default));
+
+        String urlString = protocol + "://" + serverAddress + ":" + serverPort + getString(R.string.check_status_subURL) + nonce;
+        URL url = new URL(urlString);
         try {
             String registerStatusResult = new CheckRegisterStatus().execute(url).get();
-            try {
-                JSONObject jsonObject = new JSONObject(registerStatusResult);
-                registerStatus = jsonObject.getString("Status");
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putString(getString(R.string.register_status), registerStatus);
-                buttonStatus.setText(registerStatus);
-                if (registerStatus.equals("Pending")) {
-                    buttonStatus.setBackgroundResource(R.drawable.button_bg_rounded_corners_pending);
-                    buttonStatus.setTextColor(getApplication().getResources().getColor(R.color.yellowSolid));
-                }else {
-                    timer.cancel();
-                    if (registerStatus.equals("Approved")) {
-                        buttonStatus.setBackgroundResource(R.drawable.button_bg_rounded_corners_approved);
-                        buttonStatus.setTextColor(getApplication().getResources().getColor(R.color.greenSolid));
-                    }
-                    if (registerStatus.equals("Denied")) {
-                        buttonStatus.setBackgroundResource(R.drawable.button_bg_rounded_corners_denied);
-                        buttonStatus.setTextColor(getApplication().getResources().getColor(R.color.redSolid));
-                    }
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
+            JSONObject jsonObject = new JSONObject(registerStatusResult);
+            registerStatus = jsonObject.getString("Status");
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(getString(R.string.register_status), registerStatus);
+            editor.commit();
+            applyStatus(registerStatus);
+            if (!registerStatus.equals("Pending")) {
+                int guid = Integer.parseInt(jsonObject.getString("GUID"));
+                editor.putInt(getString(R.string.register_guid), guid);
+                editor.commit();
+                timer.cancel();
             }
-
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }

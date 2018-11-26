@@ -5,16 +5,27 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.view.View;
+import android.widget.Button;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
     // use a compound button so either checkbox or switch widgets work.
 //    private TextView statusMessage;
 //    private TextView barcodeValue;
-
-    private static final int RC_BARCODE_CAPTURE = 9001;
-    private static final String TAG = "KYCMain";
+    private String registerStatus;
+    private Timer timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,12 +34,75 @@ public class MainActivity extends Activity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        statusMessage = (TextView)findViewById(R.id.status_message);
-//        barcodeValue = (TextView)findViewById(R.id.barcode_value);
+        SharedPreferences sharedPref = this.getSharedPreferences("PROFILE", Context.MODE_PRIVATE);
+        registerStatus = sharedPref.getString(getString(R.string.register_status), "Pending");
+        applyStatus(registerStatus);
 
         findViewById(R.id.button_register).setOnClickListener(this);
         findViewById(R.id.button_login).setOnClickListener(this);
+        findViewById(R.id.text_configure).setOnClickListener(this);
 
+        if (registerStatus.equals("Pending")) {
+
+            final Handler handler = new Handler();
+            timer = new Timer();
+            TimerTask doAsynchronousTask = new TimerTask() {
+                @Override
+                public void run() {
+                    handler.post(new Runnable() {
+                        public void run() {
+                            try {
+                                checkStatus();
+                            } catch (Exception e) {
+                            }
+                        }
+                    });
+                }
+            };
+            timer.schedule(doAsynchronousTask, 0, 1000); //execute in every 1 sec
+        }
+    }
+
+    private void applyStatus(String status){
+        Button loginButton = findViewById(R.id.button_login);
+        if (status.equals("Approved")) {
+            loginButton.setTextColor(getApplication().getResources().getColor(R.color.purpleSolid));
+        }else{
+            loginButton.setTextColor(getApplication().getResources().getColor(R.color.colorPrimary));
+        }
+    }
+
+    private void checkStatus() throws MalformedURLException {
+        SharedPreferences sharedPref = this.getSharedPreferences("PROFILE", Context.MODE_PRIVATE);
+        String nonce = sharedPref.getString(getString(R.string.register_nonce), "");
+        SharedPreferences settingSharedPref = this.getSharedPreferences("SETTING", Context.MODE_PRIVATE);
+        String protocol = settingSharedPref.getString(getString(R.string.server_protocol), getString(R.string.server_protocol_default));
+        String serverAddress = settingSharedPref.getString(getString(R.string.server_address), getString(R.string.server_address_default));
+        String serverPort = settingSharedPref.getString(getString(R.string.server_port), getString(R.string.server_port_default));
+
+        String urlString = protocol + "://" + serverAddress + ":" + serverPort + getString(R.string.check_status_subURL) + nonce;
+        URL url = new URL(urlString);
+        try {
+            String registerStatusResult = new CheckRegisterStatus().execute(url).get();
+            JSONObject jsonObject = new JSONObject(registerStatusResult);
+            registerStatus = jsonObject.getString("Status");
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(getString(R.string.register_status), registerStatus);
+            editor.commit();
+            applyStatus(registerStatus);
+            if (!registerStatus.equals("Pending")) {
+                int guid = Integer.parseInt(jsonObject.getString("GUID"));
+                editor.putInt(getString(R.string.register_guid), guid);
+                editor.commit();
+                timer.cancel();
+            }
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -39,8 +113,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.button_login) {
-            // launch barcode activity.
-            Intent intent = new Intent(this, Login.class);
+            if (!registerStatus.equals("Approved")) {
+                Snackbar.make(findViewById(R.id.main_activity), getString(R.string.no_registered_message), Snackbar.LENGTH_LONG).show();
+            }else {
+                // launch login activity.
+                Intent intent = new Intent(this, Login.class);
+                startActivity(intent);
+            }
+        }
+        if (v.getId() == R.id.text_configure) {
+            // launch setting activity.
+            Intent intent = new Intent(this, Setting.class);
             startActivity(intent);
         }
         if (v.getId() == R.id.button_register) {

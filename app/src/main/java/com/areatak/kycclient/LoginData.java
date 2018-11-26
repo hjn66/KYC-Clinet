@@ -3,24 +3,15 @@ package com.areatak.kycclient;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class RegisterData {
-    private String NationalID;
+public class LoginData {
     private URL url;
-    private String nonce;
+    private String signedNonce;
     private String ticket;
+    private int GUID;
     private String firstName;
     private String lastName;
     private String encodedPhoto;
-    private String birthDate;
-    private String publicKey;
 
-    public String getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(String birthdate) {
-        this.birthDate = birthdate;
-    }
 
     public String getEncodedPhoto() {
         return encodedPhoto;
@@ -28,6 +19,14 @@ public class RegisterData {
 
     public void setEncodedPhoto(String encodedPhoto) {
         this.encodedPhoto = encodedPhoto;
+    }
+
+    public int getGUID() {
+        return GUID;
+    }
+
+    public void setGUID(int GUID) {
+        this.GUID = GUID;
     }
 
     public String getFirstName() {
@@ -46,12 +45,12 @@ public class RegisterData {
         this.lastName = lastName;
     }
 
-    public String getNonce() {
-        return nonce;
+    public String getSignedNonce() {
+        return signedNonce;
     }
 
-    public void setNonce(String nonce) {
-        this.nonce = nonce;
+    public void setSignedNonce(String signedNonce) {
+        this.signedNonce = signedNonce;
     }
 
     public String getTicket() {
@@ -62,14 +61,6 @@ public class RegisterData {
         this.ticket = ticket;
     }
 
-    public String getNationalID() {
-        return NationalID;
-    }
-
-    public void setNationalID(String nationalID) {
-        NationalID = nationalID;
-    }
-
     public URL getUrl() {
         return url;
     }
@@ -78,26 +69,14 @@ public class RegisterData {
         this.url = url;
     }
 
-    public String getPublicKey() {
-        return publicKey;
-    }
 
-    public void setPublicKey(String publicKey) {
-        this.publicKey = publicKey;
-    }
-
-
-
-    public RegisterData(String url, String nationalID, String firstName, String lastName,String birthDate, String encodedPhoto,String publicKey, String nonce, String ticket) throws MalformedURLException {
-        NationalID = nationalID;
+    public LoginData(String url, int GUID, String firstName, String lastName, String encodedPhoto, String signedNonce, String ticket) throws MalformedURLException {
         this.url = new URL(url);
-        this.nonce = nonce;
+        this.GUID = GUID;
+        this.signedNonce = signedNonce;
         this.ticket = ticket;
         this.firstName = firstName;
         this.lastName = lastName;
         this.encodedPhoto = encodedPhoto;
-        this.birthDate = birthDate;
-        this.publicKey = publicKey;
     }
-
 }

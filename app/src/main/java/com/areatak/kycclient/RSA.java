@@ -43,7 +43,6 @@ public class RSA {
 
     public static RSAPrivateKey getPrivateKeyFromString(String key) throws IOException, GeneralSecurityException {
         String privateKeyPEM = key;
-        privateKeyPEM = privateKeyPEM.replace("\n", "");
         byte[] encoded = Base64.decode(privateKeyPEM,Base64.DEFAULT);
         KeyFactory kf = KeyFactory.getInstance("RSA");
         PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(encoded);

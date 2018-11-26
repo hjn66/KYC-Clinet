@@ -2,74 +2,12 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/IDDDD"
+    android:id="@+id/activity_edit_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_circles"
-    tools:context=".Register">
+    tools:context=".LoginEdit">
 
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/textLayoutOrganization"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="32dp"
-
-        android:layout_marginRight="32dp"
-
-        android:textColorHint="@color/colorPrimary"
-        android:theme="@style/AppTheme"
-        app:fontFamily="@font/roboto"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textLoginTitle">
-
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/textOrganization"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-
-            android:hint="Organization"
-            android:inputType="numberDecimal"
-            android:textColor="@color/colorPrimary"
-            android:textColorHighlight="@color/colorPrimary"
-            android:textColorHint="@color/colorPrimary"
-            android:theme="@style/AppTheme"
-            app:fontFamily="@font/roboto" />
-    </android.support.design.widget.TextInputLayout>
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginBottom="32dp"
-        android:text="Still without account?"
-        android:textColor="@color/colorPrimary"
-        android:textSize="16sp"
-        app:fontFamily="@font/roboto"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="0dp"
-        android:layout_height="21dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginBottom="32dp"
-        android:text="Register Now"
-        android:textColor="@color/design_default_color_primary"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:fontFamily="@font/roboto"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView3" />
 
     <TextView
         android:id="@+id/textLoginTitle"
@@ -78,7 +16,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
         android:layout_marginTop="32dp"
-        android:text="@string/register_title"
+        android:text="@string/Login_to"
         android:textColor="@android:color/background_dark"
         android:textSize="24sp"
         app:fontFamily="@font/roboto"
@@ -91,24 +29,24 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
+
         android:layout_marginEnd="32dp"
 
         android:layout_marginRight="32dp"
-
         android:textColorHint="@color/colorPrimary"
         android:theme="@style/AppTheme"
         app:fontFamily="@font/roboto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textLayoutOrganization">
+        app:layout_constraintTop_toBottomOf="@+id/textLoginTitle">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/textnationalId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:hint="National ID"
+            android:importantForAutofill="noExcludeDescendants"
             android:inputType="numberDecimal"
             android:text="0603289241"
             android:textColor="@color/colorPrimary"
@@ -140,6 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="FirstName"
+            android:importantForAutofill="noExcludeDescendants"
             android:inputType="textPersonName"
             android:text="Hojjat"
             android:textColor="@color/colorPrimary"
@@ -168,6 +107,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="LastName"
+            android:importantForAutofill="noExcludeDescendants"
             android:inputType="textPersonName"
             android:text="Jashn"
             android:textColor="@color/colorPrimary"
@@ -185,6 +125,7 @@
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:layout_marginBottom="8dp"
+        android:importantForAutofill="noExcludeDescendants"
         android:textColorHint="@color/colorPrimary"
         android:theme="@style/AppTheme"
         app:layout_constraintBottom_toTopOf="@+id/button_login"
@@ -212,10 +153,9 @@
         android:layout_marginLeft="32dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/button_bg_rounded_corners"
-        android:onClick="performRegister"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:text="@string/button_register"
+        android:text="@string/Login_edit_info"
         android:textAllCaps="false"
         android:textColor="@color/purpleSolid"
         app:layout_constraintStart_toStartOf="parent"
@@ -229,10 +169,9 @@
         android:layout_marginLeft="32dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/button_bg_rounded_corners"
-        android:onClick="openBarcode"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:text="@string/button_rescan_qr_code"
+        android:text="@string/button_cancel"
         android:textAllCaps="false"
         android:textColor="@color/purpleSolid"
         app:layout_constraintStart_toEndOf="@+id/button_login"
@@ -245,7 +184,6 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
-        android:onClick="performFileSearch"
         android:src="@drawable/avatar"
         app:civ_border_color="@color/purpleSolid"
         app:civ_border_width="2dp"
@@ -261,23 +199,8 @@
         android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:background="@drawable/button_bg_rounded_corners"
-        android:onClick="performFileSearch"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textLayoutNationalId"
         app:srcCompat="@android:drawable/ic_menu_edit" />
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:progressDrawable="@drawable/circular_progress_bar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

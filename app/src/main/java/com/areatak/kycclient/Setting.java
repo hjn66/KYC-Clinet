@@ -15,7 +15,7 @@ public class Setting extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = this.getSharedPreferences("SETTING", Context.MODE_PRIVATE);
 
         EditText textServer = findViewById(R.id.textAddress);
         String serverAddressDefaultValue = getResources().getString(R.string.server_address_default);
@@ -26,7 +26,6 @@ public class Setting extends AppCompatActivity {
         String serverPortDefaultValue = getResources().getString(R.string.server_port_default);
         String serverPort = sharedPref.getString(getString(R.string.server_port), serverPortDefaultValue);
         textPort.setText(serverPort);
-
 
         EditText textProtocol = findViewById(R.id.textProtocol);
         String serverProtocolDefaultValue = getResources().getString(R.string.server_protocol_default);
