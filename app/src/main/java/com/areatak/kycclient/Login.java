@@ -156,6 +156,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             intent.putExtra(getString(R.string.login_fields),fields);
             intent.putExtra(getString(R.string.login_ticket),ticket);
             intent.putExtra(getString(R.string.login_nonce),nonce);
+            intent.putExtra(getString(R.string.login_organization),loginOrganization.getText().toString());
             startActivity(intent);
         }
         if (v.getId() == R.id.button_cancel) {

@@ -2,17 +2,22 @@ package com.areatak.kycclient;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -30,6 +35,7 @@ public class Profile extends AppCompatActivity {
     private String registerStatus;
     private Button buttonStatus;
     private Timer timer;
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +63,18 @@ public class Profile extends AppCompatActivity {
         EditText txtPublicKey = findViewById(R.id.textPublickey);
         String publicKey = sharedPref.getString(getString(R.string.publicKey), "");
         txtPublicKey.setText(publicKey);
+
+        imageView = findViewById(R.id.profile_image);
+        Uri uri;
+        try {
+            uri = Uri.parse(sharedPref.getString(getString(R.string.profile_image_uri), ""));
+            InputStream inputStream = getContentResolver().openInputStream(uri);
+            imageView.setImageBitmap(BitmapFactory.decodeStream(inputStream));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         registerStatus = sharedPref.getString(getString(R.string.register_status), "Pending");
         applyStatus(registerStatus);

@@ -48,6 +48,8 @@ public class LoginEdit extends AppCompatActivity implements View.OnClickListener
         fields = getIntent().getStringExtra(getString(R.string.login_fields));
         ticket = getIntent().getStringExtra(getString(R.string.login_ticket));
         nonce = getIntent().getStringExtra(getString(R.string.login_nonce));
+        TextView textLoginTitle = findViewById(R.id.textLoginTitle);
+        textLoginTitle.setText(getIntent().getStringExtra(getString(R.string.login_organization)));
 
         findViewById(R.id.button_login).setOnClickListener(this);
         findViewById(R.id.button_cancel).setOnClickListener(this);
@@ -94,12 +96,12 @@ public class LoginEdit extends AppCompatActivity implements View.OnClickListener
         if (fields.indexOf('L') >= 0) {
             textLastName.setEnabled(true);
         } else {
-            textBirthDate.setEnabled(false);
+            textLastName.setEnabled(false);
         }
         if (fields.indexOf('B') >= 0) {
             textBirthDate.setEnabled(true);
         } else {
-            textLastName.setEnabled(false);
+            textBirthDate.setEnabled(false);
         }
         if (fields.indexOf('I') >= 0) {
             imageView.setOnClickListener(this);

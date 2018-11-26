@@ -1,6 +1,7 @@
 package com.areatak.kycclient;
 
 import android.os.AsyncTask;
+import android.util.Base64;
 import android.util.Log;
 
 import org.json.JSONObject;
@@ -10,6 +11,7 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.MessageDigest;
 
 class SendRegisterPost extends AsyncTask<RegisterData, Void, String> {
 
@@ -29,8 +31,7 @@ class SendRegisterPost extends AsyncTask<RegisterData, Void, String> {
             jsonParam.put("FirstName", registerData.getFirstName());
             jsonParam.put("LastName", registerData.getLastName());
             jsonParam.put("Nonce", registerData.getNonce());
-            jsonParam.put("Photo", registerData.getEncodedPhoto());
-//            jsonParam.put("Photo", "123");
+            jsonParam.put("Photo", registerData.getEncodedPhoto().replace("\n",""));
             jsonParam.put("BirthDate", registerData.getBirthDate());
             jsonParam.put("Ticket", registerData.getTicket());
             jsonParam.put("PublicKey", registerData.getPublicKey());

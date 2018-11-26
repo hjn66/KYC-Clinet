@@ -272,7 +272,7 @@ public class Register extends AppCompatActivity {
             spinner.setVisibility(View.VISIBLE);
             String registerResult = new SendRegisterPost().execute(registerData).get();
             spinner.setVisibility(View.GONE);
-            Snackbar.make(findViewById(R.id.IDDDD), registerResult, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(findViewById(R.id.activity_register), registerResult, Snackbar.LENGTH_LONG).show();
             FileOutputStream outputStream;
 
             outputStream = openFileOutput("publicKey.pem", Context.MODE_PRIVATE);
@@ -315,6 +315,9 @@ public class Register extends AppCompatActivity {
 //
             editor.putString(getString(R.string.privateKey), privateKey);
             editor.commit();
+
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
 
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();

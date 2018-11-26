@@ -53,6 +53,7 @@
     <string name="isRegistered">Is Registered</string>
     <string name="Login_title">Login</string>
     <string name="Login_to">Login to</string>
+    <string name="login_organization"></string>
     <string name="Login_edit_info">Edit &amp; Login</string>
     <string name="Login_info">Following information need</string>
     <string name="required">Required</string>

@@ -1,6 +1,7 @@
 package com.areatak.kycclient;
 
 import android.os.AsyncTask;
+import android.util.Base64;
 import android.util.Log;
 
 import org.json.JSONObject;
@@ -10,6 +11,7 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.MessageDigest;
 
 class SendLoginPost extends AsyncTask<LoginData, Void, String> {
 
@@ -28,7 +30,7 @@ class SendLoginPost extends AsyncTask<LoginData, Void, String> {
             jsonParam.put("FirstName", loginData.getFirstName());
             jsonParam.put("LastName", loginData.getLastName());
             jsonParam.put("SignedNonce", loginData.getSignedNonce());
-            jsonParam.put("Image", loginData.getEncodedPhoto());
+            jsonParam.put("Image", loginData.getEncodedPhoto().replace("\n",""));
             jsonParam.put("Ticket", loginData.getTicket());
             jsonParam.put("GUID", loginData.getGUID());
 
