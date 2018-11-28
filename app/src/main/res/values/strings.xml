@@ -44,8 +44,9 @@
     <string name="register_text">You should scan QR image of bank in order to register your information</string>
     <string name="register_title">Register</string>
     <string name="register_status">Register Status</string>
-    <string name="register_nonce"></string>
-    <string name="register_guid"></string>
+    <string name="register_nonce">Nonce</string>
+    <string name="register_guid">GUID</string>
+    <string name="logout">Logout</string>
     <string name="no_registered_message">You have not registered or your registration not approved yet</string>
     <string name="register_subURL">/registerQR</string>
     <string name="login_subURL">/checkfield</string>

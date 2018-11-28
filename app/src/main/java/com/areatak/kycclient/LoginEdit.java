@@ -211,6 +211,11 @@ public class LoginEdit extends AppCompatActivity implements View.OnClickListener
 
             JSONObject jsonObject = new JSONObject(loginResult);
             Snackbar.make(findViewById(R.id.activity_edit_login), jsonObject.getString("Message"), Snackbar.LENGTH_LONG).show();
+            if (jsonObject.getBoolean("CheckImage") &&jsonObject.getBoolean("CheckFirstName") &&jsonObject.getBoolean("CheckLastName") ){
+                Intent intent = new Intent(this, Account.class);
+                intent.putExtra(getString(R.string.login_organization),organization);
+                startActivity(intent);
+            }
 
         } catch (MalformedURLException e) {
             e.printStackTrace();

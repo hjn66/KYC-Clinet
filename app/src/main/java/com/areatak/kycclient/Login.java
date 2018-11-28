@@ -3,9 +3,11 @@ package com.areatak.kycclient;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,7 +20,10 @@ import com.google.android.gms.vision.barcode.Barcode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.security.GeneralSecurityException;
 import java.security.interfaces.RSAPrivateKey;
@@ -32,6 +37,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private String nonce;
     private String fields;
     private String organization;
+    private String encodedImage;
     private TextView loginOrganization;
     private Button firstNameButton;
     private Button lastNameButton;
@@ -192,8 +198,18 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 //        int guid = 1006;
         String firstName = sharedPref.getString(getString(R.string.firstName), "");
         String lastName = sharedPref.getString(getString(R.string.lastName), "");
-        String encodedImage = sharedPref.getString(getString(R.string.encoded_image), "");
-
+        encodedImage = "";
+        Uri uri = Uri.parse(sharedPref.getString(getString(R.string.profile_image_uri), ""));
+        InputStream inputStream;
+        try {
+            inputStream = getContentResolver().openInputStream(uri);
+            byte[] bytes = readBytes(inputStream);
+            encodedImage = Base64.encodeToString(bytes, Base64.DEFAULT);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         sharedPref = this.getSharedPreferences("SETTING", Context.MODE_PRIVATE);
         String protocol = sharedPref.getString(getString(R.string.server_protocol), getString(R.string.server_protocol_default));
         String serverAddress = sharedPref.getString(getString(R.string.server_address), getString(R.string.server_address_default));
@@ -220,5 +236,22 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+    public byte[] readBytes(InputStream inputStream) throws IOException {
+        // this dynamically extends to take the bytes you read
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+
+        // this is storage overwritten on each iteration with bytes
+        int bufferSize = 1024;
+        byte[] buffer = new byte[bufferSize];
+
+        // we need to know how may bytes were read to write them to the byteBuffer
+        int len = 0;
+        while ((len = inputStream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, len);
+        }
+
+        // and then we can return your byte array.
+        return byteBuffer.toByteArray();
     }
 }
