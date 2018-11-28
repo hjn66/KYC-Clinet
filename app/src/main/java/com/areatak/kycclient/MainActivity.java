@@ -21,9 +21,6 @@ import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
-    // use a compound button so either checkbox or switch widgets work.
-//    private TextView statusMessage;
-//    private TextView barcodeValue;
     private String registerStatus;
     private Timer timer;
 
@@ -42,32 +39,29 @@ public class MainActivity extends Activity implements View.OnClickListener {
         findViewById(R.id.button_login).setOnClickListener(this);
         findViewById(R.id.text_configure).setOnClickListener(this);
 
-        if (registerStatus.equals("Pending")) {
-
-            final Handler handler = new Handler();
-            timer = new Timer();
-            TimerTask doAsynchronousTask = new TimerTask() {
-                @Override
-                public void run() {
-                    handler.post(new Runnable() {
-                        public void run() {
-                            try {
-                                checkStatus();
-                            } catch (Exception e) {
-                            }
+        final Handler handler = new Handler();
+        timer = new Timer();
+        TimerTask doAsynchronousTask = new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+                    public void run() {
+                        try {
+                            checkStatus();
+                        } catch (Exception e) {
                         }
-                    });
-                }
-            };
-            timer.schedule(doAsynchronousTask, 0, 1000); //execute in every 1 sec
-        }
+                    }
+                });
+            }
+        };
+        timer.schedule(doAsynchronousTask, 0, 1000); //execute in every 1 sec
     }
 
-    private void applyStatus(String status){
+    private void applyStatus(String status) {
         Button loginButton = findViewById(R.id.button_login);
         if (status.equals("Approved")) {
             loginButton.setTextColor(getApplication().getResources().getColor(R.color.purpleSolid));
-        }else{
+        } else {
             loginButton.setTextColor(getApplication().getResources().getColor(R.color.colorPrimary));
         }
     }
@@ -115,7 +109,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         if (v.getId() == R.id.button_login) {
             if (!registerStatus.equals("Approved")) {
                 Snackbar.make(findViewById(R.id.main_activity), getString(R.string.no_registered_message), Snackbar.LENGTH_LONG).show();
-            }else {
+            } else {
                 // launch login activity.
                 Intent intent = new Intent(this, Login.class);
                 startActivity(intent);
@@ -127,12 +121,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
             startActivity(intent);
         }
         if (v.getId() == R.id.button_register) {
-            SharedPreferences sharedPref = this.getSharedPreferences("PROFILE",Context.MODE_PRIVATE);
-            Boolean isRegistered = sharedPref.getBoolean(getString(R.string.isRegistered),false);
-            if (isRegistered){
+            SharedPreferences sharedPref = this.getSharedPreferences("PROFILE", Context.MODE_PRIVATE);
+            Boolean isRegistered = sharedPref.getBoolean(getString(R.string.isRegistered), false);
+            if (isRegistered) {
                 Intent intent = new Intent(this, Profile.class);
                 startActivity(intent);
-            }else {
+            } else {
                 Intent intent = new Intent(this, Register.class);
                 startActivity(intent);
             }

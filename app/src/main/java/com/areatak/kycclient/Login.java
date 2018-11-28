@@ -31,6 +31,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private String ticket;
     private String nonce;
     private String fields;
+    private String organization;
     private TextView loginOrganization;
     private Button firstNameButton;
     private Button lastNameButton;
@@ -80,10 +81,12 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
                 try {
                     JSONObject jsonObject = new JSONObject(barcode.displayValue);
-                    loginOrganization.setText(getString(R.string.Login_to) + " " + jsonObject.getString("O"));
                     ticket = jsonObject.getString("T");
                     nonce = jsonObject.getString("N");
+                    organization= jsonObject.getString("O");
                     fields = jsonObject.getString("F");
+                    loginOrganization.setText(getString(R.string.Login_to) + " " +organization);
+
                     if (fields.indexOf('F') >= 0) {
                         firstNameButton.setText(getString(R.string.required));
                         firstNameButton.setBackgroundResource(R.drawable.button_bg_rounded_corners_approved);
@@ -156,7 +159,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             intent.putExtra(getString(R.string.login_fields),fields);
             intent.putExtra(getString(R.string.login_ticket),ticket);
             intent.putExtra(getString(R.string.login_nonce),nonce);
-            intent.putExtra(getString(R.string.login_organization),loginOrganization.getText().toString());
+            intent.putExtra(getString(R.string.login_organization),organization);
             startActivity(intent);
         }
         if (v.getId() == R.id.button_cancel) {
@@ -203,6 +206,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             loginResult = new SendLoginPost().execute(loginData).get();
             JSONObject jsonObject = new JSONObject(loginResult);
             Snackbar.make(findViewById(R.id.activity_login), jsonObject.getString("Message"), Snackbar.LENGTH_LONG).show();
+            if (jsonObject.getBoolean("CheckImage") &&jsonObject.getBoolean("CheckFirstName") &&jsonObject.getBoolean("CheckLastName") ){
+                Intent intent = new Intent(this, Account.class);
+                intent.putExtra(getString(R.string.login_organization),organization);
+                startActivity(intent);
+            }
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

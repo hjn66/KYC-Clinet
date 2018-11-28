@@ -310,9 +310,6 @@ public class Register extends AppCompatActivity {
             editor.putString(getString(R.string.encoded_image), encodedImage);
             editor.commit();
 
-//            editor.putString(getString(R.string.publicKey), publicKey);
-//            editor.commit();
-//
             editor.putString(getString(R.string.privateKey), privateKey);
             editor.commit();
 

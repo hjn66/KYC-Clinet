@@ -33,6 +33,7 @@ public class LoginEdit extends AppCompatActivity implements View.OnClickListener
     private String nonce;
     private TextView loginOrganization;
     private String fields;
+    private String organization;
     private String encodedImage;
     private static final int READ_REQUEST_CODE = 45;
     private EditText textNationalId;
@@ -48,8 +49,9 @@ public class LoginEdit extends AppCompatActivity implements View.OnClickListener
         fields = getIntent().getStringExtra(getString(R.string.login_fields));
         ticket = getIntent().getStringExtra(getString(R.string.login_ticket));
         nonce = getIntent().getStringExtra(getString(R.string.login_nonce));
-        TextView textLoginTitle = findViewById(R.id.textLoginTitle);
-        textLoginTitle.setText(getIntent().getStringExtra(getString(R.string.login_organization)));
+        loginOrganization = findViewById(R.id.textLoginTitle);
+        organization = getIntent().getStringExtra(getString(R.string.login_organization));
+        loginOrganization.setText(getString(R.string.Login_to) + " " + organization);
 
         findViewById(R.id.button_login).setOnClickListener(this);
         findViewById(R.id.button_cancel).setOnClickListener(this);
@@ -166,7 +168,7 @@ public class LoginEdit extends AppCompatActivity implements View.OnClickListener
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
-        if(v.getId() == R.id.buttonChooseImage || v.getId() == R.id.profile_image){
+        if (v.getId() == R.id.buttonChooseImage || v.getId() == R.id.profile_image) {
             performFileSearch(v);
         }
 

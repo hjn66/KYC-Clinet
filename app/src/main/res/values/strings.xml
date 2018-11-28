@@ -30,7 +30,7 @@
     <string name="invalid_nationalID">Invalid National ID</string>
     <string name="firstName">First Name</string>
     <string name="profile_image">Profile Image</string>
-    <string name="encoded_image">Profile Image</string>
+    <string name="encoded_image">Encoded Image</string>
     <string name="invalid_firstName">First Name Required</string>
     <string name="lastName">Last Name</string>
     <string name="invalid_lastName">Last Name Required</string>
@@ -53,7 +53,7 @@
     <string name="isRegistered">Is Registered</string>
     <string name="Login_title">Login</string>
     <string name="Login_to">Login to</string>
-    <string name="login_organization"></string>
+    <string name="login_organization">Organization</string>
     <string name="Login_edit_info">Edit &amp; Login</string>
     <string name="Login_info">Following information need</string>
     <string name="required">Required</string>
@@ -63,4 +63,7 @@
     <string name="login_ticket">Login Ticket</string>
     <string name="login_nonce">Login Nonce</string>
     <string name="profile_image_uri">ProfileImageURI</string>
+    <string name="login_successful">Welcome to</string>
+    <string name="account_Balance">Account Balance</string>
+    <string name="balance">2000$</string>
 </resources>
