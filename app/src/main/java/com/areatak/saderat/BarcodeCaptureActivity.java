@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.areatak.kycclient;
+package com.areatak.saderat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -39,9 +39,9 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.widget.Toast;
 
-import com.areatak.kycclient.camera.ui.CameraSource;
-import com.areatak.kycclient.camera.ui.CameraSourcePreview;
-import com.areatak.kycclient.camera.ui.GraphicOverlay;
+import com.areatak.saderat.camera.ui.CameraSource;
+import com.areatak.saderat.camera.ui.CameraSourcePreview;
+import com.areatak.saderat.camera.ui.GraphicOverlay;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.CommonStatusCodes;

@@ -1,4 +1,4 @@
-package com.areatak.kycclient;
+package com.areatak.saderat;
 
 import android.Manifest;
 import android.app.Activity;
@@ -97,20 +97,19 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+
         if (v.getId() == R.id.button_login) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                final String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
-                ActivityCompat.requestPermissions(this, permissions, RC_HANDLE_STORAGE_PERM);
-                return;
-            }else {
-                // Check if Registered And Approved
-                if (checkRegisterFileExists()){
+            if (!checkRegisterFileExists()) {
+                Snackbar.make(findViewById(R.id.main_activity), getString(R.string.no_registered_message), Snackbar.LENGTH_LONG).show();
+            } else {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    final String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+                    ActivityCompat.requestPermissions(this, permissions, RC_HANDLE_STORAGE_PERM);
+                    return;
+                } else {
                     Intent intent = new Intent(this, Login.class);
                     startActivity(intent);
-                }else{
-                    Snackbar.make(findViewById(R.id.main_activity), getString(R.string.no_registered_message), Snackbar.LENGTH_LONG).show();
                 }
-
             }
         }
         if (v.getId() == R.id.text_configure) {

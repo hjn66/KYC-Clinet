@@ -1,4 +1,4 @@
-package com.areatak.kycclient;
+package com.areatak.saderat;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.areatak.kycclient", appContext.getPackageName());
+        assertEquals("com.areatak.saderat", appContext.getPackageName());
     }
 }

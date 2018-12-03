@@ -1,7 +1,6 @@
-package com.areatak.kycclient;
+package com.areatak.saderat;
 
 import android.os.AsyncTask;
-import android.util.Base64;
 import android.util.Log;
 
 import org.json.JSONObject;
@@ -11,7 +10,6 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.security.MessageDigest;
 
 class SendLoginPost extends AsyncTask<LoginData, Void, String> {
 

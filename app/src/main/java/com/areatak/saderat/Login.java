@@ -1,4 +1,4 @@
-package com.areatak.kycclient;
+package com.areatak.saderat;
 
 import android.content.Context;
 import android.content.Intent;
@@ -26,11 +26,11 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
 import java.net.MalformedURLException;
 import java.security.GeneralSecurityException;
 import java.security.interfaces.RSAPrivateKey;
@@ -71,16 +71,16 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         SharedPreferences sharedPref = this.getSharedPreferences("PROFILE", Context.MODE_PRIVATE);
 
         EditText textNationalId = findViewById(R.id.textnationalId);
-        textNationalId.setText(sharedPref.getString(getString(R.string.nationalID), ""));
+        textNationalId.setText(sharedPref.getString(getString(R.string.xml_nationalID), ""));
 
         EditText textFirstName = findViewById(R.id.textFirstName);
-        textFirstName.setText(sharedPref.getString(getString(R.string.firstName), ""));
+        textFirstName.setText(sharedPref.getString(getString(R.string.xml_firstName), ""));
 
         EditText textLastName = findViewById(R.id.textLastName);
-        textLastName.setText(sharedPref.getString(getString(R.string.lastName), ""));
+        textLastName.setText(sharedPref.getString(getString(R.string.xml_lastName), ""));
 
         EditText textBirthDate = findViewById(R.id.textBirthDate);
-        textBirthDate.setText(sharedPref.getString(getString(R.string.birthDate), ""));
+        textBirthDate.setText(sharedPref.getString(getString(R.string.xml_birthDate), ""));
 
         Intent intent = new Intent(this, BarcodeCaptureActivity.class);
         startActivityForResult(intent, RC_BARCODE_CAPTURE);
@@ -187,7 +187,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         String signed = "";
         try {
             SharedPreferences sharedPref = this.getSharedPreferences("PROFILE", Context.MODE_PRIVATE);
-            String privateKey = sharedPref.getString(getString(R.string.privateKey), "");
+            String privateKey = sharedPref.getString(getString(R.string.xml_privateKey), "");
             pkey = RSA.getPrivateKeyFromString(privateKey);
             signed = RSA.sign(pkey, nonce);
             signed = signed.replace("\n", "");
@@ -203,13 +203,12 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         SharedPreferences sharedPref = this.getSharedPreferences("PROFILE", Context.MODE_PRIVATE);
         int guid = sharedPref.getInt(getString(R.string.register_guid), 0);
 //        int guid = 1006;
-        String firstName = sharedPref.getString(getString(R.string.firstName), "");
-        String lastName = sharedPref.getString(getString(R.string.lastName), "");
-        encodedImage = "";
-        Uri uri = Uri.parse(sharedPref.getString(getString(R.string.profile_image_uri), ""));
-        InputStream inputStream;
+        String firstName = sharedPref.getString(getString(R.string.xml_firstName), "");
+        String lastName = sharedPref.getString(getString(R.string.xml_lastName), "");
         try {
-            inputStream = getContentResolver().openInputStream(uri);
+            File folderKYC = new File(Environment.getExternalStorageDirectory(), getString(R.string.KYC_folder_name));
+            File profileImageFile = new File(folderKYC,  getString(R.string.profile_image_file));
+            InputStream inputStream = new FileInputStream(profileImageFile);
             byte[] bytes = readBytes(inputStream);
             encodedImage = Base64.encodeToString(bytes, Base64.DEFAULT);
         } catch (FileNotFoundException e) {
@@ -258,19 +257,20 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             File registerFile = new File(file, "register.xml");
             myParser.setInput(new FileReader(registerFile));
             int event = myParser.getEventType();
+            String tagName = "";
             while (event != XmlPullParser.END_DOCUMENT) {
-                String tagName = "";
                 switch (event) {
                     case XmlPullParser.START_TAG:
                         tagName = myParser.getName();
                         break;
                     case XmlPullParser.TEXT:
                         String text = myParser.getText();
-                        if (tagName.equals(R.string.register_guid)){
+                        if (tagName.equals(getString(R.string.register_guid))){
                             editor.putInt(tagName, Integer.parseInt(text));
                         }else {
                             editor.putString(tagName, text);
                         }
+                        editor.commit();
                         break;
                 }
                 event = myParser.next();

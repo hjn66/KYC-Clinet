@@ -1,4 +1,4 @@
-package com.areatak.kycclient;
+package com.areatak.saderat;
 
 import android.content.Context;
 import android.content.Intent;
@@ -34,7 +34,7 @@ public class Setting extends AppCompatActivity {
     }
     /** Called when the user taps the Save button */
     public void saveSetting(View view) {
-        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = this.getSharedPreferences("SETTING", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
 
         EditText textServer = findViewById(R.id.textAddress);

@@ -1,4 +1,4 @@
-package com.areatak.kycclient;
+package com.areatak.saderat;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
@@ -19,6 +20,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -60,31 +63,31 @@ public class LoginEdit extends AppCompatActivity implements View.OnClickListener
         SharedPreferences sharedPref = this.getSharedPreferences("PROFILE", Context.MODE_PRIVATE);
 
         textNationalId = findViewById(R.id.textnationalId);
-        textNationalId.setText(sharedPref.getString(getString(R.string.nationalID), ""));
+        textNationalId.setText(sharedPref.getString(getString(R.string.xml_nationalID), ""));
 
         textFirstName = findViewById(R.id.textFirstName);
-        textFirstName.setText(sharedPref.getString(getString(R.string.firstName), ""));
+        textFirstName.setText(sharedPref.getString(getString(R.string.xml_firstName), ""));
 
         textLastName = findViewById(R.id.textLastName);
-        textLastName.setText(sharedPref.getString(getString(R.string.lastName), ""));
+        textLastName.setText(sharedPref.getString(getString(R.string.xml_lastName), ""));
 
         textBirthDate = findViewById(R.id.textBirthDate);
-        textBirthDate.setText(sharedPref.getString(getString(R.string.birthDate), ""));
+        textBirthDate.setText(sharedPref.getString(getString(R.string.xml_birthDate), ""));
 
         imageView = findViewById(R.id.profile_image);
-        encodedImage = sharedPref.getString(getString(R.string.encoded_image), "");
-        Uri uri = null;
         try {
-            uri = Uri.parse(sharedPref.getString(getString(R.string.profile_image_uri), ""));
-            InputStream inputStream = getContentResolver().openInputStream(uri);
+            File folderKYC = new File(Environment.getExternalStorageDirectory(), getString(R.string.KYC_folder_name));
+            File profileImageFile = new File(folderKYC,  getString(R.string.profile_image_file));
+            InputStream inputStream = new FileInputStream(profileImageFile);
             imageView.setImageBitmap(BitmapFactory.decodeStream(inputStream));
+            inputStream = new FileInputStream(profileImageFile);
+            byte[] bytes = readBytes(inputStream);
+            encodedImage = Base64.encodeToString(bytes, Base64.DEFAULT);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
         if (fields.indexOf('N') >= 0) {
             textNationalId.setEnabled(true);
         } else {
@@ -179,7 +182,7 @@ public class LoginEdit extends AppCompatActivity implements View.OnClickListener
         String signed = "";
         try {
             SharedPreferences sharedPref = this.getSharedPreferences("PROFILE", Context.MODE_PRIVATE);
-            String privateKey = sharedPref.getString(getString(R.string.privateKey), "");
+            String privateKey = sharedPref.getString(getString(R.string.xml_privateKey), "");
             pkey = RSA.getPrivateKeyFromString(privateKey);
             signed = RSA.sign(pkey, nonce);
             signed = signed.replace("\n", "");

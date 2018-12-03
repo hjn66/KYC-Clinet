@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.areatak.kycclient;
+package com.areatak.saderat;
 
 import android.content.Context;
 import android.support.annotation.UiThread;
 
-import com.areatak.kycclient.camera.ui.GraphicOverlay;
+import com.areatak.saderat.camera.ui.GraphicOverlay;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.Tracker;
 import com.google.android.gms.vision.barcode.Barcode;

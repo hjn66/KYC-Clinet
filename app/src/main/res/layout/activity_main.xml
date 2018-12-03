@@ -14,31 +14,37 @@
 
     <TextView
         android:id="@+id/text_configure"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="21dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
         android:text="Configure Now"
         android:textColor="@color/colorAccent"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:textStyle="bold"
         app:fontFamily="@font/roboto"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/textView6"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView6"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="21dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
         android:layout_marginTop="24dp"
         android:text="Have'nt configured Setting?"
-        android:textColor="@color/common_google_signin_btn_text_dark_default"
-        android:textSize="16sp"
+        android:textColor="@color/design_default_color_primary_dark"
+        android:textSize="14sp"
         android:textStyle="bold"
         app:fontFamily="@font/roboto"
+        app:layout_constraintEnd_toStartOf="@+id/text_configure"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -57,28 +63,11 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/button_register"
-        android:layout_width="120dp"
-        android:layout_height="40dp"
-        android:layout_marginBottom="16dp"
-        android:width="100dp"
-        android:height="40dp"
-        android:background="@drawable/button_bg_rounded_corners"
-        android:text="@string/button_register_profile"
-        android:textAllCaps="false"
-        android:textColor="@color/purpleSolid"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/button_login"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <android.support.constraint.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.85" />
+        app:layout_constraintGuide_percent="0.75" />
 
 </android.support.constraint.ConstraintLayout>

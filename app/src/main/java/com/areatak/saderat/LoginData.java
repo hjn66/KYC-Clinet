@@ -1,4 +1,4 @@
-package com.areatak.kycclient;
+package com.areatak.saderat;
 
 import java.net.MalformedURLException;
 import java.net.URL;
