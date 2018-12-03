@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
@@ -19,11 +20,17 @@ import com.google.android.gms.vision.barcode.Barcode;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.net.MalformedURLException;
 import java.security.GeneralSecurityException;
 import java.security.interfaces.RSAPrivateKey;
@@ -60,6 +67,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         nationalIdButton = findViewById(R.id.button_nationalId);
         imageButton = findViewById(R.id.button_image);
         birthDateButton = findViewById(R.id.button_birthDate);
+        openRegisterXML();
         SharedPreferences sharedPref = this.getSharedPreferences("PROFILE", Context.MODE_PRIVATE);
 
         EditText textNationalId = findViewById(R.id.textnationalId);
@@ -79,8 +87,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode,
-                                 Intent resultData) {
+    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
         if (requestCode == RC_BARCODE_CAPTURE && resultCode == CommonStatusCodes.SUCCESS) {
             if (resultData != null) {
                 Barcode barcode = resultData.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
@@ -89,9 +96,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     JSONObject jsonObject = new JSONObject(barcode.displayValue);
                     ticket = jsonObject.getString("T");
                     nonce = jsonObject.getString("N");
-                    organization= jsonObject.getString("O");
+                    organization = jsonObject.getString("O");
                     fields = jsonObject.getString("F");
-                    loginOrganization.setText(getString(R.string.Login_to) + " " +organization);
+                    loginOrganization.setText(getString(R.string.Login_to) + " " + organization);
 
                     if (fields.indexOf('F') >= 0) {
                         firstNameButton.setText(getString(R.string.required));
@@ -162,10 +169,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         }
         if (v.getId() == R.id.button_edit_login) {
             Intent intent = new Intent(this, LoginEdit.class);
-            intent.putExtra(getString(R.string.login_fields),fields);
-            intent.putExtra(getString(R.string.login_ticket),ticket);
-            intent.putExtra(getString(R.string.login_nonce),nonce);
-            intent.putExtra(getString(R.string.login_organization),organization);
+            intent.putExtra(getString(R.string.login_fields), fields);
+            intent.putExtra(getString(R.string.login_ticket), ticket);
+            intent.putExtra(getString(R.string.login_nonce), nonce);
+            intent.putExtra(getString(R.string.login_organization), organization);
             startActivity(intent);
         }
         if (v.getId() == R.id.button_cancel) {
@@ -222,9 +229,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             loginResult = new SendLoginPost().execute(loginData).get();
             JSONObject jsonObject = new JSONObject(loginResult);
             Snackbar.make(findViewById(R.id.activity_login), jsonObject.getString("Message"), Snackbar.LENGTH_LONG).show();
-            if (jsonObject.getBoolean("CheckImage") &&jsonObject.getBoolean("CheckFirstName") &&jsonObject.getBoolean("CheckLastName") ){
+            if (jsonObject.getBoolean("CheckImage") && jsonObject.getBoolean("CheckFirstName") && jsonObject.getBoolean("CheckLastName")) {
                 Intent intent = new Intent(this, Account.class);
-                intent.putExtra(getString(R.string.login_organization),organization);
+                intent.putExtra(getString(R.string.login_organization), organization);
                 startActivity(intent);
             }
         } catch (MalformedURLException e) {
@@ -237,6 +244,46 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             e.printStackTrace();
         }
     }
+
+    private void openRegisterXML() {
+        SharedPreferences sharedPref = this.getSharedPreferences("PROFILE", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        try {
+            XmlPullParserFactory xmlFactoryObject = XmlPullParserFactory.newInstance();
+            XmlPullParser myParser = xmlFactoryObject.newPullParser();
+            File file = new File(Environment.getExternalStorageDirectory(), "KYC");
+            if (!file.mkdirs()) {
+                Log.w("DEBUG", "directory not created");
+            }
+            File registerFile = new File(file, "register.xml");
+            myParser.setInput(new FileReader(registerFile));
+            int event = myParser.getEventType();
+            while (event != XmlPullParser.END_DOCUMENT) {
+                String tagName = "";
+                switch (event) {
+                    case XmlPullParser.START_TAG:
+                        tagName = myParser.getName();
+                        break;
+                    case XmlPullParser.TEXT:
+                        String text = myParser.getText();
+                        if (tagName.equals(R.string.register_guid)){
+                            editor.putInt(tagName, Integer.parseInt(text));
+                        }else {
+                            editor.putString(tagName, text);
+                        }
+                        break;
+                }
+                event = myParser.next();
+            }
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public byte[] readBytes(InputStream inputStream) throws IOException {
         // this dynamically extends to take the bytes you read
         ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
