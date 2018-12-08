@@ -81,7 +81,6 @@
             android:hint="National ID"
             android:importantForAutofill="noExcludeDescendants"
             android:inputType="numberDecimal"
-            android:text="0603289241"
             android:textColor="@color/colorPrimary"
             android:textColorHighlight="@color/colorPrimary"
             android:textColorHint="@color/colorPrimary"
@@ -113,7 +112,6 @@
             android:hint="FirstName"
             android:importantForAutofill="noExcludeDescendants"
             android:inputType="textPersonName"
-            android:text="Hojjat"
             android:textColor="@color/colorPrimary"
             android:textColorHint="@color/colorPrimary"
             android:theme="@style/AppTheme" />
@@ -142,7 +140,6 @@
             android:hint="LastName"
             android:importantForAutofill="noExcludeDescendants"
             android:inputType="textPersonName"
-            android:text="Jashn"
             android:textColor="@color/colorPrimary"
             android:textColorHint="@color/colorPrimary"
             android:theme="@style/AppTheme" />
@@ -160,7 +157,7 @@
         android:layout_marginBottom="8dp"
         android:textColorHint="@color/colorPrimary"
         android:theme="@style/AppTheme"
-        app:layout_constraintBottom_toTopOf="@+id/button_login"
+        app:layout_constraintBottom_toTopOf="@+id/button_register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textLayoutLastName">
@@ -172,14 +169,13 @@
             android:hint="Birth Date"
             android:importantForAutofill="noExcludeDescendants"
             android:inputType="date"
-            android:text="1987"
             android:textColor="@color/colorPrimary"
             android:textColorHint="@color/colorPrimary"
             android:theme="@style/AppTheme" />
     </android.support.design.widget.TextInputLayout>
 
     <Button
-        android:id="@+id/button_login"
+        android:id="@+id/button_register"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginStart="32dp"
@@ -196,7 +192,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textLayoutBirthDate" />
 
     <Button
-        android:id="@+id/button_cancel"
+        android:id="@+id/button_scan"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginStart="28dp"
@@ -209,7 +205,7 @@
         android:text="@string/button_rescan_qr_code"
         android:textAllCaps="false"
         android:textColor="@color/purpleSolid"
-        app:layout_constraintStart_toEndOf="@+id/button_login"
+        app:layout_constraintStart_toEndOf="@+id/button_register"
         app:layout_constraintTop_toBottomOf="@+id/textLayoutBirthDate" />
 
     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"

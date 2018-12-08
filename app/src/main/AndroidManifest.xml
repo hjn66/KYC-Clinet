@@ -42,21 +42,15 @@
         </activity>
 
         <activity android:name=".BarcodeCaptureActivity"
-            android:label="Read Barcode"/>
+            android:label="Read Barcode" />
         <activity android:name=".Setting"
-            android:label="Setting"/>
+            android:label="Setting" />
         <activity android:name=".Register"
-            android:label="Register"/>
+            android:label="Register" />
         <activity android:name=".Profile"
-            android:label="Profile"/>
+            android:label="Profile"
+            android:noHistory = "true"/>
 
-        <activity android:name=".Login"
-            android:label="Login"/>
-        <activity android:name=".LoginEdit"
-            android:label="Edit Information &amp; Login"/>
-        <activity
-            android:name=".Account"
-            android:label="Account" />
     </application>
 
 </manifest>

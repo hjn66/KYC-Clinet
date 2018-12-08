@@ -2,15 +2,20 @@
     <string name="ok">OK</string>
     <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
     <string name="no_camera_permission">KYC Client cannot run because it does not have the camera permission. The application will now exit.</string>
-    <string name="no_storage_permission">KYC Client cannot run because it does not have the storage write permission. The application will now exit.</string>
+    <string name="no_storage_permission">KYC Client cannot run because it does not have the storage write permission.</string>
     <string name="low_storage_error">Face detector dependencies cannot be downloaded due to low device storage</string>
     <string name="title_activity_main">KYC Client</string>
+    <string name="configure_now">Configure Now</string>
+    <string name="configure_setting">Have\'nt configured Setting?</string>
     <string name="barcode_header">Click &quot;Read Barcode&quot; to read a barcode</string>
     <string name="read_barcode">Read Barcode</string>
     <string name="auto_focus">Auto Focus</string>
     <string name="use_flash">Use Flash</string>
     <string name="barcode_success">Barcode read successfully</string>
     <string name="barcode_failure">No barcode captured</string>
+    <string name="KYC_folder_name">KYC</string>
+    <string name="profile_image_file">profile.jpg</string>
+    <string name="register_file">register.xml</string>
     <string name="barcode_error">"Error reading barcode: %1$s"</string>
     <string name="app_name">KYC Client</string>
     <string name="edit_message">Enter a message</string>
@@ -18,13 +23,14 @@
     <string name="button_save">Save</string>
     <string name="button_register_profile">Register / Profile</string>
     <string name="button_register">Register</string>
+    <string name="button_profile">Profile</string>
     <string name="button_login">Login</string>
     <string name="button_rescan_qr_code">Re-Scan QR Code</string>
     <string name="button_cancel">Cancel</string>
     <string name="server_address">Address</string>
     <string name="server_address_default">46.105.145.154</string>
     <string name="server_port">Port</string>
-    <string name="server_port_default">8003</string>
+    <string name="server_port_default">80</string>
     <string name="server_protocol">Protocol</string>
     <string name="server_protocol_default">HTTP</string>
     <string name="nationalID">National ID</string>
@@ -35,6 +41,7 @@
     <string name="invalid_firstName">First Name Required</string>
     <string name="lastName">Last Name</string>
     <string name="invalid_lastName">Last Name Required</string>
+    <string name="invalid_birthDate">Birth Date Required</string>
     <string name="publicKey">Public Key</string>
     <string name="privateKey">Private Key</string>
     <string name="birthDate">Birth Date</string>
@@ -52,7 +59,6 @@
     <string name="register_subURL">/registerQR</string>
     <string name="login_subURL">/checkfield</string>
     <string name="check_status_subURL">/registers?nonce=</string>
-    <string name="isRegistered">Is Registered</string>
     <string name="Login_title">Login</string>
     <string name="Login_to">Login to</string>
     <string name="login_organization">Organization</string>
@@ -64,8 +70,17 @@
     <string name="login_fields">Login Fields</string>
     <string name="login_ticket">Login Ticket</string>
     <string name="login_nonce">Login Nonce</string>
-    <string name="profile_image_uri">ProfileImageURI</string>
     <string name="login_successful">Welcome to</string>
     <string name="account_Balance">Account Balance</string>
     <string name="balance">2000$</string>
+    <string name="xml_firstName">FirstName</string>
+    <string name="xml_lastName">LastName</string>
+    <string name="xml_birthDate">BirthDate</string>
+    <string name="xml_publicKey">PublicKey</string>
+    <string name="xml_privateKey">PrivateKey</string>
+    <string name="xml_nationalID">NationalID</string>
+    <string name="profile_image_max">Profile Image must be less than 1 MB</string>
+    <string name="profile_image_required">Profile Image Required</string>
+    <string name="register_error">Error On Fields. Please Correct Them and Register Again</string>
+    <integer name="max_image_size">1048576</integer>
 </resources>
