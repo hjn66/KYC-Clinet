@@ -150,10 +150,13 @@ public class LoginEdit extends AppCompatActivity implements View.OnClickListener
                 uri = resultData.getData();
                 try {
                     InputStream inputStream = getContentResolver().openInputStream(uri);
+                    int size =inputStream.available();
+                    Snackbar.make(findViewById(R.id.activity_edit_login), String.valueOf(size), Snackbar.LENGTH_LONG).show();
                     ImageView imageView = findViewById(R.id.profile_image);
                     byte[] bytes = readBytes(inputStream);
                     encodedImage = Base64.encodeToString(bytes, Base64.DEFAULT);
                     inputStream = getContentResolver().openInputStream(uri);
+
                     imageView.setImageBitmap(BitmapFactory.decodeStream(inputStream));
                 } catch (IOException e) {
                     e.printStackTrace();
